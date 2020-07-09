@@ -1,0 +1,82 @@
+/*
+this code will ask the user at the begining to select
+the methos he want thnn enter the value of Q1,Q2 or x,y
+and L1,L2; through the serial monitor then the arduino will
+calculate the value of X,Y. 
+*/
+#include <Servo.h>
+Servo motor1 ;
+Servo motor2 ;
+void setup(){ 
+  motor1.attach(9); 
+  motor2.attach(8);
+  motor1.write(0);
+  motor2.write(0);
+  Serial.begin(9600);}
+void loop(){ 
+  Serial.println("select 1 to solve by Forward kinematic or 2 for inverse kinematic");
+    while(Serial.available()==0){};
+  int selection=Serial.parseInt();
+  if (selection ==1){
+  Serial.println("Enter the value of q1:");
+    while(Serial.available()==0){};
+  float q1=Serial.parseInt();
+  Serial.println(q1);
+  Serial.println("Enter the value of q2:");
+    while(Serial.available()==0){};
+  float q2=Serial.parseInt();
+  Serial.println(q2);  
+  Serial.println("Enter the value of L1:");
+    while(Serial.available()==0){};
+  float L1=Serial.parseInt();
+  Serial.println(L1);
+  Serial.println("Enter the value of L2:");
+    while(Serial.available()==0){};
+  float L2=Serial.parseInt();
+  Serial.println(L2);
+  motor1.write(q1);
+  motor2.write(q2);
+  float Q1=q1*PI/180;
+  float Q2=q2*PI/180;
+  float x=L1*cos(Q1)+L2*cos(Q1+Q2);
+  float y=L1*sin(Q1)+L2*sin(Q1+Q2);
+  Serial.println(x);
+  Serial.println(y);
+  delay(8000);} 
+
+  if (selection == 2){
+  Serial.println("Enter the value of x:");
+    while(Serial.available()==0){};
+  float x=Serial.parseInt();
+  Serial.println(x);
+  Serial.println("Enter the value of y:");
+    while(Serial.available()==0){};
+  float y=Serial.parseInt();
+  Serial.println(y);  
+  Serial.println("Enter the value of L1:");
+    while(Serial.available()==0){};
+  float L1=Serial.parseInt();
+  Serial.println(L1);
+  Serial.println("Enter the value of L2:");
+    while(Serial.available()==0){};
+  float L2=Serial.parseInt();
+  Serial.println(L2);
+  float z1=pow(x,2);
+  float z2=pow(y,2);
+  float z3=pow(L1,2);
+  float z4=pow(L2,2);
+  float z5=2*L1*L2;
+  float z6=z1+z2-z3-z4;
+  float z=z6/z5;
+  Serial.println(z);
+  float Q2=acos(z);
+  float q2=Q2*180/PI ;
+  float r=y/x;
+  float q=tan(r);
+  float q1=q-q2 ;
+  Serial.println(q1);
+  Serial.println(q2);
+  motor1.write(q1);
+  motor2.write(q2);
+  delay(8000);}   
+}
